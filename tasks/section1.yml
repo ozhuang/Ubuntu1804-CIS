@@ -756,6 +756,24 @@
       - patch
       - rule_1.5.1
 
+- name: "SCORED | 1.5.1 | PATCH | Ensure permissions on bootloader config are not overriden"
+  lineinfile:
+      path: /usr/sbin/grub-mkconfig
+      regexp: "{{ item.regexp }}" 
+      line: "{{ item.line }}"
+  loop:
+      - { regexp: 'if \[ "x\$\{grub_cfg\}" != "x" \] && ! grep "\^password" \$\{grub_cfg\}.new >\/dev\/null; then', line: 'if [ "x${grub_cfg}" != "x" ]; then'}
+      - { regexp: '^  chmod 444 \$\{grub_cfg\}.new \|\| true', line: '  chmod 400 ${grub_cfg}.new || true'}
+  when:
+      - ansible_os_family == "Debian"
+      - ubuntu1804cis_rule_1_5_1
+  tags:
+      - level1
+      - scored
+      - grub
+      - patch
+      - rule_1.5.1
+
 - name: "SCORED | 1.5.2 | PATCH | Ensure bootloader password is set - generate password"
   shell: "set -o pipefail;
         if [ '{{ ubuntu1804cis_bootloader_password }}' == 'random' ];
