@@ -179,20 +179,6 @@
       - filesystems
       - rule_1.1.1.6
 
-- name: "SCORED | 1.1.1.6 | PATCH | Remove squashfs module"
-  modprobe:
-      name: squashfs
-      state: absent
-  when:
-      - ubuntu1804cis_rule_1_1_1_6
-      - not ubuntu1804cis_skip_for_travis
-  tags:
-      - level1
-      - scored
-      - patch
-      - squashfs
-      - filesystems
-      - rule_1.1.1.6
 
 - name: "SCORED | 1.1.1.7 | PATCH | Ensure mounting of udf filesystems is disabled"
   lineinfile:
